@@ -5,6 +5,7 @@ import { Pill, SessionDate } from '../types'
 import Button from "./Button";
 import DropDownPicker from "react-native-dropdown-picker";
 import EmailModal from "./EmailModal";
+import strings from "../Strings";
 
 type PillHistoryProps = PropsWithChildren<{
     pillHistory: SessionDate[];
@@ -86,7 +87,7 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList, m
                         return (
                             <Text style={styles.session} key={index}>
                                 <Text style={styles.dateText}>{date.toDateString()}, {date.toLocaleTimeString()}{"\n"}</Text>
-                                {userDate && <Text style={styles.noteText}>Date Taken: {userDate?.toDateString?.()}, {userDate?.toLocaleTimeString?.()}{"\n"}</Text>}
+                                {userDate && <Text style={styles.noteText}>{strings.DATE_TIME}: {userDate?.toDateString?.()}, {userDate?.toLocaleTimeString?.()}{"\n"}</Text>}
                                 {note && <Text style={styles.noteText}>{note}{"\n"}</Text>}
                                 {session.map(((swallow, index) => {
                                     return(
