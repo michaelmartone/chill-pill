@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import { Image, Modal, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import SettingsCheckbox from './SettingsCheckbox';
 import Button from './Button';
 import confirmation from './confirmation';
@@ -17,11 +17,6 @@ type SettingsWindowProps = PropsWithChildren<{
 }>;
 
 const SettingsWindow = ({isVisible, exit, newStyle, setNewStyle, historyIsReverse, setHistoryIsReverse, resetHistory, playSounds, setPlaySounds}: SettingsWindowProps) => {
-    const ExitButton = () =>
-        <TouchableOpacity style={styles.exitButton} onPress={() => exit()}>
-            <Image source={require('../images/exit.png')} style={styles.exitButtonIcon}/>
-        </TouchableOpacity>
-    
     const confirmClearHistory = () => {
         confirmation(
             'Confirm Clear Pill History',
@@ -32,10 +27,14 @@ const SettingsWindow = ({isVisible, exit, newStyle, setNewStyle, historyIsRevers
         );
     }
     return(
-        <Modal visible={isVisible} transparent={true} animationType="fade">
+        <Modal 
+            visible={isVisible} 
+            transparent={true} 
+            animationType="fade"
+            onRequestClose={() => exit()}
+        >
             <View style={styles.container}>
                 <View style={styles.modal}>
-                    <ExitButton />
                     <View style={styles.titleContainer}>
                         <View style={styles.title}>
                             <Text style={styles.titleText}>Settings</Text>
@@ -187,21 +186,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
     },
-    exitButton: {
-        position: "absolute",
-        zIndex: 1,
-        top: 5,
-        right: 10,
-        width: 35,
-        height: 35,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    exitButtonIcon: {
-        width: 15,
-        height: 15
-    }
 })
 
 export default SettingsWindow;

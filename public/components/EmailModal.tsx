@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react'
-import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { MMKVLoader, useMMKVStorage } from 'react-native-mmkv-storage';
 const storage = new MMKVLoader().initialize();
 import emailjs, { send } from '@emailjs/react-native';
@@ -88,13 +88,13 @@ const EmailModal = ({pillHistory, filteredPillHistory, show, close, markEmailsAs
     }
 
     return (
-        <Modal animationType='slide' visible={show} transparent={true}>
+        <Modal 
+            animationType='slide' 
+            visible={show} 
+            transparent={true}
+            onRequestClose={() => close()}
+        >
             <View style={styles.modal}>
-                <TouchableWithoutFeedback onPress={() => close()}>
-                    <View style={styles.exitButton}>
-                        <Text style={styles.exitButtonText} allowFontScaling={false}>✖</Text>
-                    </View>
-                </TouchableWithoutFeedback>
                 <View style={styles.container}>
                     <Text style={styles.title}>Email my Pill History</Text>
                     <TouchableOpacity onPress={() => setEmailEditable(!emailEditable)}>
@@ -169,16 +169,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-    },
-    exitButton: {
-        position: "absolute",
-        top: 0,
-        right: 10,
-        zIndex: 100,
-    },
-    exitButtonText: {
-        fontSize: 35,
-        color: "black"
     },
     title: {
         fontSize: 30,

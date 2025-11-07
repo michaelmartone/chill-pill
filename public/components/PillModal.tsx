@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import type {PropsWithChildren} from 'react';
 
 type PillModalProps = PropsWithChildren<{
@@ -11,14 +11,14 @@ type PillModalProps = PropsWithChildren<{
 
 const PillModal = ({isVisible, closeWindow, name, backgroundColor, children}: PillModalProps) => {
     return (
-        <Modal visible={isVisible} animationType="slide" transparent={true}>
+        <Modal 
+            visible={isVisible} 
+            animationType="slide" 
+            transparent={true}
+            onRequestClose={() => closeWindow()}
+        >
             <View style={styles.modal}>
                 <View style={[styles.window, {backgroundColor: backgroundColor || "lightgray"}]}>
-                    <TouchableWithoutFeedback onPress={() => closeWindow()}>
-                        <View style={styles.exitButton}>
-                            <Text style={styles.exitButtonText} allowFontScaling={false}>✖</Text>
-                        </View>
-                    </TouchableWithoutFeedback>
                     <Text style={styles.title} allowFontScaling={false}>{name}</Text>
                     <View style={styles.children}>
                         {children}
@@ -43,16 +43,6 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: "center",
         alignItems: "center",
-    },
-    exitButton: {
-        position: "absolute",
-        top: 0,
-        right: 10,
-        zIndex: 150,
-    },
-    exitButtonText: {
-        fontSize: 35,
-        color: "black"
     },
     title: {
         position: "absolute",

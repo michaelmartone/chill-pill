@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
+  BackHandler,
   Image,
   SafeAreaView,
   StyleSheet,
@@ -168,6 +169,48 @@ function App(): React.JSX.Element {
   useEffect(() => {
     sortHistoryByDate()
   }, [historyIsReverse])
+
+  // Handle Android back button
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      // Close modals in order of priority
+      if (settingsWindowOpen) {
+        setSettingsWindowOpen(false)
+        return true // Prevent default behavior
+      }
+      if (pillHistoryOpen) {
+        setPillHistoryOpen(false)
+        return true
+      }
+      if (pillManagerOpen) {
+        setPillManagerOpen(false)
+        return true
+      }
+      if (pillTakerOpen) {
+        setPillTakerOpen(false)
+        return true
+      }
+      if (pillAdderOpen) {
+        setPillAdderOpen(false)
+        return true
+      }
+      // If no modals are open, show confirmation before exiting
+      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'YES', 
+          onPress: () => BackHandler.exitApp()
+        },
+      ]);
+      return true // Prevent default behavior while Alert is shown
+    })
+
+    return () => backHandler.remove()
+  }, [pillAdderOpen, pillTakerOpen, pillManagerOpen, pillHistoryOpen, settingsWindowOpen])
 
   const sortHistoryByDate = () => {
     const oldPillHistory = pillHistory
