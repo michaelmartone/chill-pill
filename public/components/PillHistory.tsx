@@ -36,7 +36,7 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList, m
     }, [emailSectionOpen])
 
     const downloadHistory = () => {
-        console.log(pillHistory)
+        // TODO: Implement history download functionality
     }
 
     const samePill = (pill1: Pill, pill2: Pill) => {

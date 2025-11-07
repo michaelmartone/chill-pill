@@ -32,7 +32,12 @@ const SettingsWindow = ({isVisible, exit, newStyle, setNewStyle, historyIsRevers
         );
     }
     return(
-        <Modal visible={isVisible} transparent={true} animationType="fade">
+        <Modal 
+            visible={isVisible} 
+            transparent={true} 
+            animationType="fade"
+            onRequestClose={() => exit()}
+        >
             <View style={styles.container}>
                 <View style={styles.modal}>
                     <ExitButton />

@@ -194,8 +194,19 @@ function App(): React.JSX.Element {
         setPillAdderOpen(false)
         return true
       }
-      // If no modals are open, allow default behavior (exit app)
-      return false
+      // If no modals are open, show confirmation before exiting
+      Alert.alert('Hold on!', 'Are you sure you want to go back?', [
+        {
+          text: 'Cancel',
+          onPress: () => null,
+          style: 'cancel',
+        },
+        {
+          text: 'YES', 
+          onPress: () => BackHandler.exitApp()
+        },
+      ]);
+      return true // Prevent default behavior while Alert is shown
     })
 
     return () => backHandler.remove()

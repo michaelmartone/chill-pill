@@ -88,7 +88,12 @@ const EmailModal = ({pillHistory, filteredPillHistory, show, close, markEmailsAs
     }
 
     return (
-        <Modal animationType='slide' visible={show} transparent={true}>
+        <Modal 
+            animationType='slide' 
+            visible={show} 
+            transparent={true}
+            onRequestClose={() => close()}
+        >
             <View style={styles.modal}>
                 <TouchableWithoutFeedback onPress={() => close()}>
                     <View style={styles.exitButton}>
