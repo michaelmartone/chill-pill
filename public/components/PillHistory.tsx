@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { BackHandler, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import type {PropsWithChildren} from 'react';
 import { Pill, SessionDate } from '../types'
 import Button from "./Button";
@@ -22,6 +22,18 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList, m
     }))
     const [filterValue, setFilterValue] = useState<number|null>(null)
     const [emailSectionOpen, setEmailSectionOpen] = useState<boolean>(false)
+
+    // Handle Android back button for EmailModal
+    useEffect(() => {
+        if (!emailSectionOpen) return
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            setEmailSectionOpen(false)
+            return true // Prevent default behavior
+        })
+
+        return () => backHandler.remove()
+    }, [emailSectionOpen])
 
     const downloadHistory = () => {
         console.log(pillHistory)
