@@ -83,10 +83,11 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList, m
                     {pillHistoryDisplay.map((sessionDate: SessionDate, index) => {
                         const { session, note, userDate } = sessionDate
                         const date = new Date(sessionDate.date)
+                        const userDateObj = userDate ? new Date(userDate) : null                        
                         return (
                             <Text style={styles.session} key={index}>
                                 <Text style={styles.dateText}>{date.toDateString()}, {date.toLocaleTimeString()}{"\n"}</Text>
-                                {userDate && <Text style={styles.noteText}>Date Taken: {userDate?.toDateString?.()}, {userDate?.toLocaleTimeString?.()}{"\n"}</Text>}
+                                {userDateObj && <Text style={styles.noteText}>Date Taken: {userDateObj.toDateString()}, {userDateObj.toLocaleTimeString()}{"\n"}</Text>}
                                 {note && <Text style={styles.noteText}>{note}{"\n"}</Text>}
                                 {session.map(((swallow, index) => {
                                     return(
