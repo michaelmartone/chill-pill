@@ -292,7 +292,6 @@ function App(): React.JSX.Element {
           historyIsReverse={historyIsReverse}
           reverseHistory={() => setHistoryIsReverse(!historyIsReverse)}
           pillList={pills}
-          markEmailsAsSent={(toMarkSent: number[]) => markEmailsAsSent(toMarkSent)}
         />
       </PillModal>
       <TouchableOpacity onPress={() => setSettingsWindowOpen(true)} style={styles.settingsWindowOpen}>
