@@ -1,30 +1,74 @@
 import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Share, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import type {PropsWithChildren} from 'react';
 import { Pill, SessionDate } from '../types'
 import Button from "./Button";
 import DropDownPicker from "react-native-dropdown-picker";
-import EmailModal from "./EmailModal";
 
 type PillHistoryProps = PropsWithChildren<{
     pillHistory: SessionDate[];
     historyIsReverse: boolean;
     reverseHistory: Function;
     pillList: Pill[];
-    markEmailsAsSent: Function;
 }>;
 
-const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList, markEmailsAsSent}: PillHistoryProps) => {
+const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList}: PillHistoryProps) => {
     const [filterOptionsOpen, setFilterOptionsOpen] = useState<boolean>(false)
     const [filterPickerOpen, setFilterPickerOpen] = useState<boolean>(false)
     const [pills, setPills] = useState(pillList.map((pill, index) => {
         return { label: `${pill.name}: ${pill.dosage}${pill.unit}`, value: index }
     }))
     const [filterValue, setFilterValue] = useState<number|null>(null)
-    const [emailSectionOpen, setEmailSectionOpen] = useState<boolean>(false)
 
     const downloadHistory = () => {
         console.log(pillHistory)
+    }
+
+    /**
+     * Formats the displayed pill history as text for sharing
+     */
+    const formatHistoryForShare = (historyToFormat: SessionDate[]): string => {
+        const historyLines: string[] = []
+        
+        historyToFormat.forEach((sessionDate: SessionDate) => {
+            const { session, note, userDate } = sessionDate
+            const date = new Date(sessionDate.date)
+            const userDateObj = userDate ? new Date(userDate) : null
+            
+            // Add session date
+            historyLines.push(`${date.toDateString()}, ${date.toLocaleTimeString()}`)
+            
+            // Add user date if available
+            if (userDateObj && !isNaN(userDateObj.getTime())) {
+                historyLines.push(`Date Taken: ${userDateObj.toDateString()}, ${userDateObj.toLocaleTimeString()}`)
+            }
+            
+            // Add note if available
+            if (note) {
+                historyLines.push(note)
+            }
+            
+            // Add pills taken
+            session.forEach((swallow) => {
+                historyLines.push(`\t${swallow.pill.name}, ${swallow.pill.dosage}${swallow.pill.unit} X ${swallow.quantity}`)
+            })
+            
+            historyLines.push('') // Empty line between sessions
+        })
+        
+        return historyLines.join('\n')
+    }
+
+    const shareHistory = async () => {
+        try {
+            const historyText = formatHistoryForShare(pillHistoryDisplay)
+            await Share.share({
+                message: historyText,
+                title: 'Pill History'
+            })
+        } catch (error) {
+            console.error('Error sharing history:', error)
+        }
     }
 
     const samePill = (pill1: Pill, pill2: Pill) => {
@@ -83,10 +127,11 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList, m
                     {pillHistoryDisplay.map((sessionDate: SessionDate, index) => {
                         const { session, note, userDate } = sessionDate
                         const date = new Date(sessionDate.date)
+                        const userDateObj = userDate ? new Date(userDate) : null
                         return (
                             <Text style={styles.session} key={index}>
                                 <Text style={styles.dateText}>{date.toDateString()}, {date.toLocaleTimeString()}{"\n"}</Text>
-                                {userDate && <Text style={styles.noteText}>Date Taken: {userDate?.toDateString?.()}, {userDate?.toLocaleTimeString?.()}{"\n"}</Text>}
+                                {userDateObj && !isNaN(userDateObj.getTime()) && <Text style={styles.noteText}>Date Taken: {userDateObj.toDateString()}, {userDateObj.toLocaleTimeString()}{"\n"}</Text>}
                                 {note && <Text style={styles.noteText}>{note}{"\n"}</Text>}
                                 {session.map(((swallow, index) => {
                                     return(
@@ -103,15 +148,8 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList, m
             <View style={styles.downloadHistoryButton}>
                 <Button title="Download Pill History" onPress={() => downloadHistory()}></Button>
             </View>
-            <EmailModal
-                show={emailSectionOpen}
-                close={() => setEmailSectionOpen(false)}
-                pillHistory={pillHistory}
-                markEmailsAsSent={(toMarkSent: number[]) => markEmailsAsSent(toMarkSent)}
-                filteredPillHistory={pillHistoryDisplay}
-            />
-            <TouchableOpacity onPress={() => setEmailSectionOpen(true)} style={styles.openEmailSectionButton}>
-                <Image style={styles.openEmailSectionImage} source={require("../images/sendEmailIcon.png")}/>
+            <TouchableOpacity onPress={shareHistory} style={styles.shareButton}>
+                <Text style={styles.shareButtonText}>Share</Text>
             </TouchableOpacity>
         </View>
     )
@@ -178,12 +216,20 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 15,
     },
-    openEmailSectionButton: {
+    shareButton: {
         position: 'absolute',
         bottom: 20,
         right: 20,
+        backgroundColor: 'cornflowerblue',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 5,
     },
-    openEmailSectionImage: {},
+    shareButtonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
     downloadHistoryButton: {
         position: 'absolute',
         bottom: 10,
