@@ -21,18 +21,6 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList}: 
     }))
     const [filterValue, setFilterValue] = useState<number|null>(null)
 
-    // Handle Android back button for EmailModal
-    useEffect(() => {
-        if (!emailSectionOpen) return
-
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            setEmailSectionOpen(false)
-            return true // Prevent default behavior
-        })
-
-        return () => backHandler.remove()
-    }, [emailSectionOpen])
-
     const downloadHistory = () => {
         // TODO: Implement history download functionality
     }
