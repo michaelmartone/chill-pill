@@ -11,7 +11,12 @@ type PillModalProps = PropsWithChildren<{
 
 const PillModal = ({isVisible, closeWindow, name, backgroundColor, children}: PillModalProps) => {
     return (
-        <Modal visible={isVisible} animationType="slide" transparent={true}>
+        <Modal 
+            visible={isVisible} 
+            animationType="slide" 
+            transparent={true}
+            onRequestClose={() => closeWindow()}
+        >
             <View style={styles.modal}>
                 <View style={[styles.window, {backgroundColor: backgroundColor || "lightgray"}]}>
                     <TouchableWithoutFeedback onPress={() => closeWindow()}>
