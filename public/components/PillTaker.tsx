@@ -6,6 +6,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Pill, Dose } from '../types'
 import confirmation from "./confirmation";
+import strings from "../Strings";
+
 
 type PillTakerProps = PropsWithChildren<{
     pills: Pill[];
@@ -204,7 +206,7 @@ const PillTaker = ({pills, takePills, switchToPillAdder}: PillTakerProps) => {
                         </View>
                     :
                         <TouchableOpacity onPress={() => setDateOpen(true)} style={[styles.addTimeButton, noteOpen ? {bottom: 175} : {bottom: 75}]}>
-                            <Text style={styles.addTimeButtonText}>Add Time</Text>
+                            <Text style={styles.addTimeButtonText}>{strings.DATE_TIME}</Text>
                         </TouchableOpacity>
 
                 }
