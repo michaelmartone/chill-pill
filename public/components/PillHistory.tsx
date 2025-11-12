@@ -144,7 +144,7 @@ const PillHistory = ({pillHistory, historyIsReverse, reverseHistory, pillList}: 
                         return (
                             <Text style={styles.session} key={index}>
                                 <Text style={styles.dateText}>{date.toDateString()}, {date.toLocaleTimeString()}{"\n"}</Text>
-                                {userDate && <Text style={styles.noteText}>{strings.DATE_TIME}: {userDate?.toDateString?.()}, {userDate?.toLocaleTimeString?.()}{"\n"}</Text>}
+                                {userDateObj && !isNaN(userDateObj.getTime()) && <Text style={styles.noteText}>{strings.DATE_TIME}: {userDateObj.toDateString()}, {userDateObj.toLocaleTimeString()}{"\n"}</Text>}
                                 {note && <Text style={styles.noteText}>{note}{"\n"}</Text>}
                                 {session.map(((swallow, index) => {
                                     return(
